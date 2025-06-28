@@ -1,22 +1,22 @@
 from fastapi import FastAPI
-from app.config import settings
-from app.routes import user, hydration
-from app.database import Base, engine  # ✅ Fix: added missing imports
+from fastapi.middleware.cors import CORSMiddleware
+from app.routes import user, hydration, chatbot  #  make sure this resolves
 
 app = FastAPI()
 
-# Include routers
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Routes
 app.include_router(user.router)
 app.include_router(hydration.router)
+app.include_router(chatbot.router)
 
 
 @app.get("/")
 def read_root():
-    return {
-        "message": "Backend is working!"
-    }
-
-
-# Optional: only runs when using `python main.py` directly (not uvicorn)
-if __name__ == "__main__":
-    Base.metadata.create_all(bind=engine)
+    return {"message": "Backend is working!"}
