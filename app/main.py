@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from app.config import settings
 from app.routes import user, hydration
 from app.database import Base, engine  # ✅ Fix: added missing imports
+from app.routes import chatbot  # 👈 Add this with the other imports
+app.include_router(chatbot.router)  # 👈 Include it like other routers
 
 app = FastAPI()
 
